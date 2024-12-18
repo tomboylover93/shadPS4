@@ -34,6 +34,29 @@ option(ENABLE_QT_GUI "Enable the Qt GUI. If not selected then the emulator uses 
 option(ENABLE_DISCORD_RPC "Enable the Discord RPC integration" ON)
 option(ENABLE_UPDATER "Enables the options to updater" ON)
 
+option(ENABLE_PGO "Enable profile-guided optimization" OFF)
+if (ENABLE_PGO)
+    if (CMAKE_BUILD_TYPE STREQUAL "ProfileGenerate")
+        # Add flags for generating profiling data
+        message(STATUS "Building with PGO: Profile generation enabled")
+        add_compile_options(-fprofile-generate)
+        add_link_options(-fprofile-generate)
+    elseif (CMAKE_BUILD_TYPE STREQUAL "ProfileUse")
+        # Add flags for using profiling data
+        message(STATUS "Building with PGO: Using profile data")
+        add_compile_options(-fprofile-use=${CMAKE_SOURCE_DIR}/pgo/default.profdata)
+        add_link_options(-fprofile-use=${CMAKE_SOURCE_DIR}/pgo/default.profdata)
+    else()
+        message(WARNING "ENABLE_PGO is ON, but CMAKE_BUILD_TYPE is not ProfileGenerate or ProfileUse")
+    endif()
+endif()
+
+option(ENABLE_BOLT "Enable usage of LLVM BOLT through optional post-compilation actions" OFF)
+if (ENABLE_BOLT)
+   message(STATUS "Building with LLVM BOLT support")
+   add_link_options(--emit-relocs)
+endif()
+
 # First, determine whether to use CMAKE_OSX_ARCHITECTURES or CMAKE_SYSTEM_PROCESSOR.
 if (APPLE AND CMAKE_OSX_ARCHITECTURES)
     set(BASE_ARCHITECTURE "${CMAKE_OSX_ARCHITECTURES}")
