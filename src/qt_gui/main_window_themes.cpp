@@ -137,15 +137,15 @@ void WindowThemes::SetWindowTheme(Theme theme, QLineEdit* mw_searchbar) {
             "QLineEdit:focus {"
             "border: 1px solid #83A598; }");
         themePalette.setColor(QPalette::Window, QColor(29, 32, 33));
-        themePalette.setColor(QPalette::WindowText, QColor(249, 245, 215));
+        themePalette.setColor(QPalette::WindowText, Qt::white);
         themePalette.setColor(QPalette::Base, QColor(29, 32, 33));
         themePalette.setColor(QPalette::AlternateBase, QColor(50, 48, 47));
-        themePalette.setColor(QPalette::ToolTipBase, QColor(249, 245, 215));
-        themePalette.setColor(QPalette::ToolTipText, QColor(249, 245, 215));
+        themePalette.setColor(QPalette::ToolTipBase, Qt::white);
+        themePalette.setColor(QPalette::ToolTipText, Qt::white);
         themePalette.setColor(QPalette::Text, QColor(249, 245, 215));
         themePalette.setColor(QPalette::Button, QColor(40, 40, 40));
-        themePalette.setColor(QPalette::ButtonText, QColor(249, 245, 215));
-        themePalette.setColor(QPalette::BrightText, QColor(251, 73, 52));
+        themePalette.setColor(QPalette::ButtonText, Qt::white);
+        themePalette.setColor(QPalette::BrightText, Qt::red);
         themePalette.setColor(QPalette::Link, QColor(131, 165, 152));
         themePalette.setColor(QPalette::Highlight, QColor(131, 165, 152));
         themePalette.setColor(QPalette::HighlightedText, Qt::black);
