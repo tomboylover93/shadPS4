@@ -1,6 +1,4 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<!-- SPDX-FileCopyrightText: Copyright 2024 shadPS4 Emulator Project
-     SPDX-License-Identifier: GPL-2.0-or-later -->
 <ui version="4.0">
  <class>SettingsDialog</class>
  <widget class="QDialog" name="SettingsDialog">
@@ -448,7 +446,7 @@
             <item alignment="Qt::AlignmentFlag::AlignTop">
              <widget class="QGroupBox" name="GUIgroupBox">
               <property name="sizePolicy">
-               <sizepolicy hsizetype="Preferred" vsizetype="Fixed">
+               <sizepolicy hsizetype="Preferred" vsizetype="MinimumExpanding">
                 <horstretch>0</horstretch>
                 <verstretch>0</verstretch>
                </sizepolicy>
@@ -463,8 +461,14 @@
                <string>GUI Settings</string>
               </property>
               <layout class="QVBoxLayout" name="GUILayout">
+               <property name="spacing">
+                <number>5</number>
+               </property>
                <property name="topMargin">
                 <number>1</number>
+               </property>
+               <property name="rightMargin">
+                <number>11</number>
                </property>
                <property name="bottomMargin">
                 <number>11</number>
@@ -550,6 +554,13 @@
                    </widget>
                   </item>
                  </layout>
+                </widget>
+               </item>
+               <item>
+                <widget class="QCheckBox" name="systemThemeCheckBox">
+                 <property name="text">
+                  <string>Enable System Theme</string>
+                 </property>
                 </widget>
                </item>
                <item>

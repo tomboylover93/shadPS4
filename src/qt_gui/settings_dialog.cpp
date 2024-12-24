@@ -196,6 +196,7 @@ SettingsDialog::SettingsDialog(std::span<const QString> physical_devices, QWidge
 #endif
         ui->GUIgroupBox->installEventFilter(this);
         ui->widgetComboBox->installEventFilter(this);
+        ui->systemThemeCheckBox->installEventFilter(this);
         ui->disableTrophycheckBox->installEventFilter(this);
 
         // Input
@@ -271,6 +272,8 @@ void SettingsDialog::LoadValuesFromConfig() {
     ui->BGMVolumeSlider->setValue(toml::find_or<int>(data, "General", "BGMvolume", 50));
     ui->currentwidgetComboBox->setCurrentText(
         QString::fromStdString(toml::find_or<std::string>(data, "GUI", "widgetStyle", "fusion")));
+    ui->systemThemeCheckBox->setChecked(
+        toml::find_or<bool>(data, "GUI", "enableSystemTheme", false));
     ui->disableTrophycheckBox->setChecked(
         toml::find_or<bool>(data, "General", "isTrophyPopupDisabled", false));
     ui->discordRPCCheckbox->setChecked(
@@ -408,6 +411,8 @@ void SettingsDialog::updateNoteTextEdit(const QString& elementName) {
         text = tr("GUIgroupBox");
     } else if (elementName == "widgetComboBox") {
         text = tr("widgetComboBox");
+    } else if (elementName == "systemThemeCheckBox") {
+        text = tr("systemThemeCheckBox");
     } else if (elementName == "disableTrophycheckBox") {
         text = tr("disableTrophycheckBox");
     }
@@ -509,6 +514,7 @@ void SettingsDialog::UpdateSettings() {
     Config::setGpuId(ui->graphicsAdapterBox->currentIndex() - 1);
     Config::setBGMvolume(ui->BGMVolumeSlider->value());
     Config::setWidgetStyle(ui->currentwidgetComboBox->currentText().toStdString());
+    Config::setEnableSystemTheme(ui->systemThemeCheckBox->isChecked());
     Config::setLanguage(languageIndexes[ui->consoleLanguageComboBox->currentIndex()]);
     Config::setEnableDiscordRPC(ui->discordRPCCheckbox->isChecked());
     Config::setScreenWidth(ui->widthSpinBox->value());

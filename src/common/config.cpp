@@ -37,6 +37,7 @@ static bool playBGM = false;
 static bool isTrophyPopupDisabled = false;
 static int BGMvolume = 50;
 static bool enableDiscordRPC = false;
+static bool enableSystemTheme = false;
 static u32 screenWidth = 1280;
 static u32 screenHeight = 720;
 static s32 gpuId = -1; // Vulkan physical device index. Set to negative for auto select
@@ -114,6 +115,10 @@ int getBGMvolume() {
 
 bool getEnableDiscordRPC() {
     return enableDiscordRPC;
+}
+
+bool getEnableSystemTheme() {
+    return enableSystemTheme;
 }
 
 s16 getCursorState() {
@@ -318,6 +323,10 @@ void setBGMvolume(int volume) {
 
 void setEnableDiscordRPC(bool enable) {
     enableDiscordRPC = enable;
+}
+
+void setEnableSystemTheme(bool enable) {
+    enableSystemTheme = enable;
 }
 
 void setCursorState(s16 newCursorState) {
@@ -655,6 +664,7 @@ void load(const std::filesystem::path& path) {
         m_table_mode = toml::find_or<int>(gui, "gameTableMode", 0);
         emulator_language = toml::find_or<std::string>(gui, "emulatorLanguage", "en");
         widgetStyle = toml::find_or<std::string>(gui, "widgetStyle", "System");
+        enableSystemTheme = toml::find_or<bool>(gui, "enableSystemTheme", true);
     }
 
     if (data.contains("Settings")) {
@@ -732,6 +742,7 @@ void save(const std::filesystem::path& path) {
         std::string{fmt::UTF(settings_addon_install_dir.u8string()).data};
     data["GUI"]["emulatorLanguage"] = emulator_language;
     data["GUI"]["widgetStyle"] = widgetStyle;
+    data["GUI"]["enableSystemTheme"] = enableSystemTheme;
     data["Settings"]["consoleLanguage"] = m_language;
 
     std::ofstream file(path, std::ios::binary);
@@ -789,6 +800,7 @@ void setDefaultValues() {
     playBGM = false;
     BGMvolume = 50;
     enableDiscordRPC = true;
+    enableSystemTheme = false;
     screenWidth = 1280;
     screenHeight = 720;
     logFilter = "";
