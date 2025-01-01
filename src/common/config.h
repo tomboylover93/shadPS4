@@ -15,12 +15,18 @@ void load(const std::filesystem::path& path);
 void save(const std::filesystem::path& path);
 void saveMainWindow(const std::filesystem::path& path);
 
+std::string getTrophyKey();
+void setTrophyKey(std::string key);
+
 bool isNeoMode();
 bool isFullscreenMode();
 bool getPlayBGM();
 int getBGMvolume();
+bool getisTrophyPopupDisabled();
 bool getEnableDiscordRPC();
 bool getSeparateUpdateEnabled();
+bool getCompatibilityEnabled();
+bool getCheckCompatibilityOnStartup();
 
 std::string getLogFilter();
 std::string getLogType();
@@ -60,6 +66,7 @@ void setGpuId(s32 selectedGpuId);
 void setScreenWidth(u32 width);
 void setScreenHeight(u32 height);
 void setFullscreenMode(bool enable);
+void setisTrophyPopupDisabled(bool disable);
 void setPlayBGM(bool enable);
 void setBGMvolume(int volume);
 void setEnableDiscordRPC(bool enable);
@@ -69,6 +76,8 @@ void setUserName(const std::string& type);
 void setUpdateChannel(const std::string& type);
 void setSeparateUpdateEnabled(bool use);
 void setGameInstallDirs(const std::vector<std::filesystem::path>& settings_install_dirs_config);
+void setCompatibilityEnabled(bool use);
+void setCheckCompatibilityOnStartup(bool use);
 
 void setCursorState(s16 cursorState);
 void setCursorHideTimeout(int newcursorHideTimeout);

@@ -3,20 +3,24 @@
 
 #include <QCompleter>
 #include <QDirIterator>
+#include <QFileDialog>
 #include <QHoverEvent>
+#include <fmt/format.h>
 
-#include <common/version.h>
+#include "common/config.h"
+#include "common/version.h"
+#include "qt_gui/compatibility_info.h"
 #ifdef ENABLE_DISCORD_RPC
 #include "common/discord_rpc_handler.h"
+#include "common/singleton.h"
 #endif
 #ifdef ENABLE_UPDATER
 #include "check_update.h"
 #endif
 #include <toml.hpp>
+#include "background_music_player.h"
 #include "common/logging/backend.h"
 #include "common/logging/filter.h"
-#include "common/logging/formatter.h"
-#include "main_window.h"
 #include "settings_dialog.h"
 #include "ui_settings_dialog.h"
 QStringList languageNames = {"Arabic",
@@ -54,7 +58,9 @@ QStringList languageNames = {"Arabic",
 const QVector<int> languageIndexes = {21, 23, 14, 6, 18, 1, 12, 22, 2, 4,  25, 24, 29, 5,  0, 9,
                                       15, 16, 17, 7, 26, 8, 11, 20, 3, 13, 27, 10, 19, 30, 28};
 
-SettingsDialog::SettingsDialog(std::span<const QString> physical_devices, QWidget* parent)
+SettingsDialog::SettingsDialog(std::span<const QString> physical_devices,
+                               std::shared_ptr<CompatibilityInfoClass> m_compat_info,
+                               QWidget* parent)
     : QDialog(parent), ui(new Ui::SettingsDialog) {
     ui->setupUi(this);
     ui->tabWidgetSettings->setUsesScrollButtons(false);
@@ -126,8 +132,13 @@ SettingsDialog::SettingsDialog(std::span<const QString> physical_devices, QWidge
     // GENERAL TAB
     {
 #ifdef ENABLE_UPDATER
+#if (QT_VERSION < QT_VERSION_CHECK(6, 7, 0))
         connect(ui->updateCheckBox, &QCheckBox::stateChanged, this,
                 [](int state) { Config::setAutoUpdate(state == Qt::Checked); });
+#else
+        connect(ui->updateCheckBox, &QCheckBox::checkStateChanged, this,
+                [](Qt::CheckState state) { Config::setAutoUpdate(state == Qt::Checked); });
+#endif
 
         connect(ui->updateComboBox, &QComboBox::currentTextChanged, this,
                 [](const QString& channel) { Config::setUpdateChannel(channel.toStdString()); });
@@ -140,6 +151,21 @@ SettingsDialog::SettingsDialog(std::span<const QString> physical_devices, QWidge
         ui->updaterGroupBox->setVisible(false);
         ui->GUIgroupBox->setMaximumSize(265, 16777215);
 #endif
+        connect(ui->updateCompatibilityButton, &QPushButton::clicked, this,
+                [this, parent, m_compat_info]() {
+                    m_compat_info->UpdateCompatibilityDatabase(this, true);
+                    emit CompatibilityChanged();
+                });
+
+#if (QT_VERSION < QT_VERSION_CHECK(6, 7, 0))
+        connect(ui->enableCompatibilityCheckBox, &QCheckBox::stateChanged, this, [this](int state) {
+#else
+        connect(ui->enableCompatibilityCheckBox, &QCheckBox::checkStateChanged, this,
+                [this](Qt::CheckState state) {
+#endif
+            Config::setCompatibilityEnabled(state);
+            emit CompatibilityChanged();
+        });
     }
 
     // Input TAB
@@ -185,7 +211,6 @@ SettingsDialog::SettingsDialog(std::span<const QString> physical_devices, QWidge
         ui->fullscreenCheckBox->installEventFilter(this);
         ui->separateUpdatesCheckBox->installEventFilter(this);
         ui->showSplashCheckBox->installEventFilter(this);
-        ui->ps4proCheckBox->installEventFilter(this);
         ui->discordRPCCheckbox->installEventFilter(this);
         ui->userName->installEventFilter(this);
         ui->logTypeGroupBox->installEventFilter(this);
@@ -194,6 +219,10 @@ SettingsDialog::SettingsDialog(std::span<const QString> physical_devices, QWidge
         ui->updaterGroupBox->installEventFilter(this);
 #endif
         ui->GUIgroupBox->installEventFilter(this);
+        ui->disableTrophycheckBox->installEventFilter(this);
+        ui->enableCompatibilityCheckBox->installEventFilter(this);
+        ui->checkCompatibilityOnStartupCheckBox->installEventFilter(this);
+        ui->updateCompatibilityButton->installEventFilter(this);
 
         // Input
         ui->hideCursorGroupBox->installEventFilter(this);
@@ -263,6 +292,8 @@ void SettingsDialog::LoadValuesFromConfig() {
     ui->dumpShadersCheckBox->setChecked(toml::find_or<bool>(data, "GPU", "dumpShaders", false));
     ui->nullGpuCheckBox->setChecked(toml::find_or<bool>(data, "GPU", "nullGpu", false));
     ui->playBGMCheckBox->setChecked(toml::find_or<bool>(data, "General", "playBGM", false));
+    ui->disableTrophycheckBox->setChecked(
+        toml::find_or<bool>(data, "General", "isTrophyPopupDisabled", false));
     ui->BGMVolumeSlider->setValue(toml::find_or<int>(data, "General", "BGMvolume", 50));
     ui->discordRPCCheckbox->setChecked(
         toml::find_or<bool>(data, "General", "enableDiscordRPC", true));
@@ -270,7 +301,6 @@ void SettingsDialog::LoadValuesFromConfig() {
     ui->separateUpdatesCheckBox->setChecked(
         toml::find_or<bool>(data, "General", "separateUpdateEnabled", false));
     ui->showSplashCheckBox->setChecked(toml::find_or<bool>(data, "General", "showSplash", false));
-    ui->ps4proCheckBox->setChecked(toml::find_or<bool>(data, "General", "isPS4Pro", false));
     ui->logTypeComboBox->setCurrentText(
         QString::fromStdString(toml::find_or<std::string>(data, "General", "logType", "async")));
     ui->logFilterLineEdit->setText(
@@ -282,6 +312,10 @@ void SettingsDialog::LoadValuesFromConfig() {
     ui->vkSyncValidationCheckBox->setChecked(
         toml::find_or<bool>(data, "Vulkan", "validation_sync", false));
     ui->rdocCheckBox->setChecked(toml::find_or<bool>(data, "Vulkan", "rdocEnable", false));
+    ui->enableCompatibilityCheckBox->setChecked(
+        toml::find_or<bool>(data, "General", "compatibilityEnabled", false));
+    ui->checkCompatibilityOnStartupCheckBox->setChecked(
+        toml::find_or<bool>(data, "General", "checkCompatibilityOnStartup", false));
 
 #ifdef ENABLE_UPDATER
     ui->updateCheckBox->setChecked(toml::find_or<bool>(data, "General", "autoUpdate", false));
@@ -336,7 +370,7 @@ void SettingsDialog::InitializeEmulatorLanguages() {
         idx++;
     }
 
-    connect(ui->emulatorLanguageComboBox, qOverload<int>(&QComboBox::currentIndexChanged), this,
+    connect(ui->emulatorLanguageComboBox, &QComboBox::currentIndexChanged, this,
             &SettingsDialog::OnLanguageChanged);
 }
 
@@ -381,8 +415,6 @@ void SettingsDialog::updateNoteTextEdit(const QString& elementName) {
         text = tr("separateUpdatesCheckBox");
     } else if (elementName == "showSplashCheckBox") {
         text = tr("showSplashCheckBox");
-    } else if (elementName == "ps4proCheckBox") {
-        text = tr("ps4proCheckBox");
     } else if (elementName == "discordRPCCheckbox") {
         text = tr("discordRPCCheckbox");
     } else if (elementName == "userName") {
@@ -397,6 +429,14 @@ void SettingsDialog::updateNoteTextEdit(const QString& elementName) {
 #endif
     } else if (elementName == "GUIgroupBox") {
         text = tr("GUIgroupBox");
+    } else if (elementName == "disableTrophycheckBox") {
+        text = tr("disableTrophycheckBox");
+    } else if (elementName == "enableCompatibilityCheckBox") {
+        text = tr("enableCompatibilityCheckBox");
+    } else if (elementName == "checkCompatibilityOnStartupCheckBox") {
+        text = tr("checkCompatibilityOnStartupCheckBox");
+    } else if (elementName == "updateCompatibilityButton") {
+        text = tr("updateCompatibilityButton");
     }
 
     // Input
@@ -483,10 +523,9 @@ void SettingsDialog::UpdateSettings() {
 
     const QVector<std::string> TouchPadIndex = {"left", "center", "right", "none"};
     Config::setBackButtonBehavior(TouchPadIndex[ui->backButtonBehaviorComboBox->currentIndex()]);
-    Config::setNeoMode(ui->ps4proCheckBox->isChecked());
     Config::setFullscreenMode(ui->fullscreenCheckBox->isChecked());
+    Config::setisTrophyPopupDisabled(ui->disableTrophycheckBox->isChecked());
     Config::setPlayBGM(ui->playBGMCheckBox->isChecked());
-    Config::setNeoMode(ui->ps4proCheckBox->isChecked());
     Config::setLogType(ui->logTypeComboBox->currentText().toStdString());
     Config::setLogFilter(ui->logFilterLineEdit->text().toStdString());
     Config::setUserName(ui->userNameLineEdit->text().toStdString());
@@ -509,6 +548,8 @@ void SettingsDialog::UpdateSettings() {
     Config::setRdocEnabled(ui->rdocCheckBox->isChecked());
     Config::setAutoUpdate(ui->updateCheckBox->isChecked());
     Config::setUpdateChannel(ui->updateComboBox->currentText().toStdString());
+    Config::setCompatibilityEnabled(ui->enableCompatibilityCheckBox->isChecked());
+    Config::setCheckCompatibilityOnStartup(ui->checkCompatibilityOnStartupCheckBox->isChecked());
 
 #ifdef ENABLE_DISCORD_RPC
     auto* rpc = Common::Singleton<DiscordRPCHandler::RPC>::Instance();

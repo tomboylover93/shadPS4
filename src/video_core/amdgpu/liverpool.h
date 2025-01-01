@@ -428,6 +428,14 @@ struct Liverpool {
             BitField<0, 22, u32> tile_max;
         } depth_slice;
 
+        bool DepthValid() const {
+            return Address() != 0 && z_info.format != ZFormat::Invalid;
+        }
+
+        bool StencilValid() const {
+            return Address() != 0 && stencil_info.format != StencilFormat::Invalid;
+        }
+
         u32 Pitch() const {
             return (depth_size.pitch_tile_max + 1) << 3;
         }
@@ -881,10 +889,54 @@ struct Liverpool {
             return !info.linear_general;
         }
 
-        NumberFormat NumFormat() const {
+        [[nodiscard]] DataFormat DataFormat() const {
+            return RemapDataFormat(info.format);
+        }
+
+        [[nodiscard]] NumberFormat NumFormat() const {
             // There is a small difference between T# and CB number types, account for it.
-            return info.number_type == AmdGpu::NumberFormat::SnormNz ? AmdGpu::NumberFormat::Srgb
-                                                                     : info.number_type.Value();
+            return RemapNumberFormat(info.number_type == NumberFormat::SnormNz
+                                         ? NumberFormat::Srgb
+                                         : info.number_type.Value());
+        }
+
+        [[nodiscard]] CompMapping Swizzle() const {
+            // clang-format off
+            static constexpr std::array<std::array<CompMapping, 4>, 4> mrt_swizzles{{
+                // Standard
+                std::array<CompMapping, 4>{{
+                    {.r = CompSwizzle::Red, .g = CompSwizzle::Zero, .b = CompSwizzle::Zero, .a = CompSwizzle::Zero},
+                    {.r = CompSwizzle::Red, .g = CompSwizzle::Green, .b = CompSwizzle::Zero, .a = CompSwizzle::Zero},
+                    {.r = CompSwizzle::Red, .g = CompSwizzle::Green, .b = CompSwizzle::Blue, .a = CompSwizzle::Zero},
+                    {.r = CompSwizzle::Red, .g = CompSwizzle::Green, .b = CompSwizzle::Blue, .a = CompSwizzle::Alpha},
+                }},
+                // Alternate
+                std::array<CompMapping, 4>{{
+                    {.r = CompSwizzle::Green, .g = CompSwizzle::Zero, .b = CompSwizzle::Zero, .a = CompSwizzle::Zero},
+                    {.r = CompSwizzle::Red, .g = CompSwizzle::Alpha, .b = CompSwizzle::Zero, .a = CompSwizzle::Zero},
+                    {.r = CompSwizzle::Red, .g = CompSwizzle::Green, .b = CompSwizzle::Alpha, .a = CompSwizzle::Zero},
+                    {.r = CompSwizzle::Blue, .g = CompSwizzle::Green, .b = CompSwizzle::Red, .a = CompSwizzle::Alpha},
+                }},
+                // StandardReverse
+                std::array<CompMapping, 4>{{
+                    {.r = CompSwizzle::Blue, .g = CompSwizzle::Zero, .b = CompSwizzle::Zero, .a = CompSwizzle::Zero},
+                    {.r = CompSwizzle::Green, .g = CompSwizzle::Red, .b = CompSwizzle::Zero, .a = CompSwizzle::Zero},
+                    {.r = CompSwizzle::Blue, .g = CompSwizzle::Green, .b = CompSwizzle::Red, .a = CompSwizzle::Zero},
+                    {.r = CompSwizzle::Alpha, .g = CompSwizzle::Blue, .b = CompSwizzle::Green, .a = CompSwizzle::Red},
+                }},
+                // AlternateReverse
+                std::array<CompMapping, 4>{{
+                    {.r = CompSwizzle::Alpha, .g = CompSwizzle::Zero, .b = CompSwizzle::Zero, .a = CompSwizzle::Zero},
+                    {.r = CompSwizzle::Alpha, .g = CompSwizzle::Red, .b = CompSwizzle::Zero, .a = CompSwizzle::Zero},
+                    {.r = CompSwizzle::Alpha, .g = CompSwizzle::Green, .b = CompSwizzle::Red, .a = CompSwizzle::Zero},
+                    {.r = CompSwizzle::Alpha, .g = CompSwizzle::Red, .b = CompSwizzle::Green, .a = CompSwizzle::Blue},
+                }},
+            }};
+            // clang-format on
+            const auto swap_idx = static_cast<u32>(info.comp_swap.Value());
+            const auto components_idx = NumComponents(info.format) - 1;
+            const auto mrt_swizzle = mrt_swizzles[swap_idx][components_idx];
+            return RemapComponents(info.format, mrt_swizzle);
         }
     };
 
@@ -1273,6 +1325,26 @@ struct Liverpool {
                 return &ls_program;
             }
             return nullptr;
+        }
+
+        u32 NumSamples() const {
+            // It seems that the number of samples > 1 set in the AA config doesn't mean we're
+            // always rendering with MSAA, so we need to derive MS ratio from the CB and DB
+            // settings.
+            u32 num_samples = 1u;
+            if (color_control.mode != ColorControl::OperationMode::Disable) {
+                for (auto cb = 0u; cb < NumColorBuffers; ++cb) {
+                    const auto& col_buf = color_buffers[cb];
+                    if (!col_buf) {
+                        continue;
+                    }
+                    num_samples = std::max(num_samples, col_buf.NumSamples());
+                }
+            }
+            if (depth_buffer.DepthValid() || depth_buffer.StencilValid()) {
+                num_samples = std::max(num_samples, depth_buffer.NumSamples());
+            }
+            return num_samples;
         }
 
         void SetDefaults();
