@@ -1213,3 +1213,6 @@ bool MainWindow::eventFilter(QObject* obj, QEvent* event) {
                     isIconBlack = true;
                 }
             }
+        }
+    }
+}
