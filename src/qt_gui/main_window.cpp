@@ -131,6 +131,9 @@ void MainWindow::AddUiWidgets() {
     } else if (widget_style == "System") {
         qApp->setStyle(qsystem_style_name);
     }
+    foreach (QWidget* widget, QApplication::topLevelWidgets()) {
+        widget->update();
+    }
     ui->toolBar->setObjectName("mw_toolbar");
     ui->toolBar->addWidget(ui->playButton);
     ui->toolBar->addWidget(ui->pauseButton);
@@ -1020,6 +1023,10 @@ void MainWindow::SetLastUsedTheme() {
             isIconBlack = true;
         }
         break;
+
+        foreach (QWidget* widget, QApplication::topLevelWidgets()) {
+            widget->update();
+        }
     }
 }
 
@@ -1206,26 +1213,3 @@ bool MainWindow::eventFilter(QObject* obj, QEvent* event) {
                     isIconBlack = true;
                 }
             }
-        }
-    }
-    return QMainWindow::eventFilter(obj, event);
-}
-
-void MainWindow::StartEmulator(std::filesystem::path path) {
-    if (isGameRunning) {
-        QMessageBox::critical(nullptr, tr("Run Game"), QString(tr("Game is already running!")));
-        return;
-    }
-    isGameRunning = true;
-#ifdef __APPLE__
-    // SDL on macOS requires main thread.
-    Core::Emulator emulator;
-    emulator.Run(path);
-#else
-    std::thread emulator_thread([=] {
-        Core::Emulator emulator;
-        emulator.Run(path);
-    });
-    emulator_thread.detach();
-#endif
-}
