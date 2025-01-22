@@ -5,7 +5,7 @@ SPDX-License-Identifier: GPL-2.0-or-later
 
 ## Build shadPS4 for Linux
 
-First and foremost, Clang 18 is the **recommended compiler** as it is used for official builds and CI. If you build with GCC, you might encounter issues — please report any you find. Additionally, if you choose to use GCC, please build shadPS4 with Clang at least once before creating an `APP BUG` issue or submitting a pull request.
+First and foremost, Clang 18 is the **recommended compiler** as it is used for official builds and CI. If you build with GCC, you might encounter issues — please report any you find. Additionally, if you choose to use GCC, please build shadPS4 with Clang at least once before creating an `[APP BUG]` issue or submitting a pull request.
 
 ## Preparatory steps
 
@@ -68,7 +68,7 @@ Generate the build directory in the shadPS4 directory.
 cmake -S . -B build/ -DENABLE_QT_GUI=ON -DCMAKE_C_COMPILER=clang -DCMAKE_CXX_COMPILER=clang++
 ```
 
-To disable the Qt GUI, remove the ```-DENABLE_QT_GUI=ON``` flag. To change the build type (for debugging), add ```-DCMAKE_BUILD_TYPE=Debug```.
+To disable the Qt GUI, remove the `-DENABLE_QT_GUI=ON` flag. To change the build type (for debugging), add `-DCMAKE_BUILD_TYPE=Debug`.
 
 Enter the directory:
 
@@ -82,7 +82,7 @@ Use CMake to build the project:
 cmake --build . --parallel$(nproc)
 ```
 
-If your computer freezes during this step, this could be caused by excessive system resource usage. In that case, remove ```--parallel$(nproc)```.
+If your computer freezes during this step, this could be caused by excessive system resource usage. In that case, remove `--parallel$(nproc)`.
 
 Now run the emulator. If Qt was enabled at configure time:
 
@@ -97,3 +97,6 @@ Otherwise, specify the path to your PKG's boot file:
 ```
 
 #### Option 2: Configuring with cmake-gui
+
+`cmake-gui` should be installed by default alongside `cmake`, if not search for the package in your package manager and install it.
+
