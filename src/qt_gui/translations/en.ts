@@ -1161,6 +1161,234 @@
 		</message>
 	</context>
 	<context>
+		<name>SettingsDialog</name>
+		<message>
+			<location filename="../settings_dialog.cpp" line="83"/>
+			<source>Save</source>
+			<translation>Save</translation>
+		</message>
+		<message>
+			<location filename="../settings_dialog.cpp" line="84"/>
+			<source>Apply</source>
+			<translation>Apply</translation>
+		</message>
+		<message>
+			<location filename="../settings_dialog.cpp" line="85"/>
+			<source>Restore Defaults</source>
+			<translation>Restore Defaults</translation>
+		</message>
+		<message>
+			<location filename="../settings_dialog.cpp" line="86"/>
+			<source>Close</source>
+			<translation>Close</translation>
+		</message>
+		<message>
+			<location filename="../settings_dialog.cpp" line="72"/>
+			<source>Point your mouse at an option to display its description.</source>
+			<translation>Point your mouse at an option to display its description.</translation>
+		</message>
+		<message>
+			<location filename="../settings_dialog.cpp" line="289"/>
+			<source>consoleLanguageGroupBox</source>
+			<translation>Console Language:\nSets the language that the PS4 game uses.\nIt's recommended to set this to a language the game supports, which will vary by region.</translation>
+		</message>
+		<message>
+			<location filename="../settings_dialog.cpp" line="291"/>
+			<source>emulatorLanguageGroupBox</source>
+			<translation>Emulator Language:\nSets the language of the emulator's user interface.</translation>
+		</message>
+		<message>
+			<location filename="../settings_dialog.cpp" line="293"/>
+			<source>fullscreenCheckBox</source>
+			<translation>Enable Full Screen:\nAutomatically puts the game window into full-screen mode.\nThis can be toggled by pressing the F11 key.</translation>
+		</message>
+		<message>
+			<location filename="../settings_dialog.cpp" line="293"/>
+			<source>separateUpdatesCheckBox</source>
+			<translation>Enable Separate Update Folder:\nEnables installing game updates into a separate folder for easy management.\nThis can be manually created by adding the extracted update to the game folder with the name "CUSA00000-UPDATE" where the CUSA ID matches the game's ID.</translation>
+		</message>
+		<message>
+			<location filename="../settings_dialog.cpp" line="295"/>
+			<source>showSplashCheckBox</source>
+			<translation>Show Splash Screen:\nShows the game's splash screen (a special image) while the game is starting.</translation>
+		</message>
+		<message>
+			<location filename="../settings_dialog.cpp" line="297"/>
+			<source>ps4proCheckBox</source>
+			<translation>Is PS4 Pro:\nMakes the emulator act as a PS4 PRO, which may enable special features in games that support it.</translation>
+		</message>
+		<message>
+			<location filename="../settings_dialog.cpp" line="438"/>
+			<source>discordRPCCheckbox</source>
+			<translation>Enable Discord Rich Presence:\nDisplays the emulator icon and relevant information on your Discord profile.</translation>
+		</message>
+		<message>
+			<location filename="../settings_dialog.cpp" line="299"/>
+			<source>userName</source>
+			<translation>Username:\nSets the PS4's account username, which may be displayed by some games.</translation>
+		</message>
+		<message>
+			<location filename="../settings_dialog.cpp"/>
+			<source>TrophyKey</source>
+			<translation>Trophy Key:\nKey used to decrypt trophies. Must be obtained from your jailbroken console.\nMust contain only hex characters.</translation>
+		</message>
+		<message>
+			<location filename="../settings_dialog.cpp" line="301"/>
+			<source>logTypeGroupBox</source>
+			<translation>Log Type:\nSets whether to synchronize the output of the log window for performance. May have adverse effects on emulation.</translation>
+		</message>
+		<message>
+			<location filename="../settings_dialog.cpp" line="303"/>
+			<source>logFilter</source>
+			<translation>Log Filter:\nFilters the log to only print specific information.\nExamples: "Core:Trace" "Lib.Pad:Debug Common.Filesystem:Error" "*:Critical"\nLevels: Trace, Debug, Info, Warning, Error, Critical - in this order, a specific level silences all levels preceding it in the list and logs every level after it.</translation>
+		</message>
+		<message>
+			<location filename="../settings_dialog.cpp" line="305"/>
+			<source>updaterGroupBox</source>
+			<translation>Update:\nRelease: Official versions released every month that may be very outdated, but are more reliable and tested.\nNightly: Development versions that have all the latest features and fixes, but may contain bugs and are less stable.</translation>
+		</message>
+		<message>
+			<location filename="../settings_dialog.cpp" line="306"/>
+			<source>GUIgroupBox</source>
+			<translation>Play Title Music:\nIf a game supports it, enable playing special music when selecting the game in the GUI.</translation>
+		</message>
+		<message>
+			<location filename="../settings_dialog.cpp" line="307"/>
+			<source>widgetComboBox</source>
+			<translation>Widget Styles:\nChoose the widget style for the app. Defaults to Fusion. "System" uses your system's widget style (Breeze, Oxygen, Kvantum etc).</translation>
+		</message>
+	    <message>
+			<location filename="../settings_dialog.cpp" line="267"/>
+			<source>disableTrophycheckBox</source>
+			<translation>Disable Trophy Pop-ups:\nDisable in-game trophy notifications. Trophy progress can still be tracked using the Trophy Viewer (right-click the game in the main window).</translation>
+		</message>
+		<message>
+			<location filename="../settings_dialog.cpp" line="450"/>
+			<source>hideCursorGroupBox</source>
+			<translation>Hide Cursor:\nChoose when the cursor will disappear:\nNever: You will always see the mouse.\nidle: Set a time for it to disappear after being idle.\nAlways: you will never see the mouse.</translation>
+		</message>
+		<message>
+			<location filename="../settings_dialog.cpp" line="452"/>
+			<source>idleTimeoutGroupBox</source>
+			<translation>Hide Idle Cursor Timeout:\nThe duration (seconds) after which the cursor that has been idle hides itself.</translation>
+		</message>
+		<message>
+			<location filename="../settings_dialog.cpp" line="454"/>
+			<source>backButtonBehaviorGroupBox</source>
+			<translation>Back Button Behavior:\nSets the controller's back button to emulate tapping the specified position on the PS4 touchpad.</translation>
+		</message>
+		<message>
+			<location filename="../settings_dialog.cpp"/>
+			<source>enableCompatibilityCheckBox</source>
+			<translation>Display Compatibility Data:\nDisplays game compatibility information in table view. Enable "Update Compatibility On Startup" to get up-to-date information.</translation>
+		</message>
+		<message>
+			<location filename="../settings_dialog.cpp"/>
+			<source>checkCompatibilityOnStartupCheckBox</source>
+			<translation>Update Compatibility On Startup:\nAutomatically update the compatibility database when shadPS4 starts.</translation>
+		</message>
+		<message>
+			<location filename="../settings_dialog.cpp"/>
+			<source>updateCompatibilityButton</source>
+			<translation>Update Compatibility Database:\nImmediately update the compatibility database.</translation>
+		</message>
+		<message>
+			<location filename="../settings_dialog.cpp" line="70"/>
+			<source>Never</source>
+			<translation>Never</translation>
+		</message>
+		<message>
+			<location filename="../settings_dialog.cpp" line="71"/>
+			<source>Idle</source>
+			<translation>Idle</translation>
+		</message>
+		<message>
+			<location filename="../settings_dialog.cpp" line="72"/>
+			<source>Always</source>
+			<translation>Always</translation>
+		</message>
+		<message>
+			<location filename="../settings_dialog.cpp" line="101"/>
+			<source>Touchpad Left</source>
+			<translation>Touchpad Left</translation>
+		</message>
+		<message>
+			<location filename="../settings_dialog.cpp" line="102"/>
+			<source>Touchpad Right</source>
+			<translation>Touchpad Right</translation>
+		</message>
+		<message>
+			<location filename="../settings_dialog.cpp" line="103"/>
+			<source>Touchpad Center</source>
+			<translation>Touchpad Center</translation>
+		</message>
+		<message>
+			<location filename="../settings_dialog.cpp" line="104"/>
+			<source>None</source>
+			<translation>None</translation>
+		</message>
+		<message>
+			<location filename="../settings_dialog.cpp" line="312"/>
+			<source>graphicsAdapterGroupBox</source>
+			<translation>Graphics Device:\nOn multiple GPU systems, select the GPU the emulator will use from the drop down list,\nor select "Auto Select" to automatically determine it.</translation>
+		</message>
+		<message>
+			<location filename="../settings_dialog.cpp" line="314"/>
+			<source>resolutionLayout</source>
+			<translation>Width/Height:\nSets the size of the emulator window at launch, which can be resized during gameplay.\nThis is different from the in-game resolution.</translation>
+		</message>
+		<message>
+			<location filename="../settings_dialog.cpp" line="318"/>
+			<source>heightDivider</source>
+			<translation>Vblank Divider:\nThe frame rate at which the emulator refreshes at is multiplied by this number. Changing this may have adverse effects, such as increasing the game speed, or breaking critical game functionality that does not expect this to change!</translation>
+		</message>
+		<message>
+			<location filename="../settings_dialog.cpp" line="320"/>
+			<source>dumpShadersCheckBox</source>
+			<translation>Enable Shaders Dumping:\nFor the sake of technical debugging, saves the games shaders to a folder as they render.</translation>
+		</message>
+		<message>
+			<location filename="../settings_dialog.cpp" line="322"/>
+			<source>nullGpuCheckBox</source>
+			<translation>Enable Null GPU:\nFor the sake of technical debugging, disables game rendering as if there were no graphics card.</translation>
+		</message>
+		<message>
+			<location filename="../settings_dialog.cpp" line="465"/>
+			<source>gameFoldersBox</source>
+			<translation>Game Folders:\nThe list of folders to check for installed games.</translation>
+		</message>
+		<message>
+			<location filename="../settings_dialog.cpp" line="465"/>
+			<source>addFolderButton</source>
+			<translation>Add:\nAdd a folder to the list.</translation>
+		</message>
+		<message>
+			<location filename="../settings_dialog.cpp" line="465"/>
+			<source>removeFolderButton</source>
+			<translation>Remove:\nRemove a folder from the list.</translation>
+		</message>
+		<message>
+			<location filename="../settings_dialog.cpp" line="329"/>
+			<source>debugDump</source>
+			<translation>Enable Debug Dumping:\nSaves the import and export symbols and file header information of the currently running PS4 program to a directory.</translation>
+		</message>
+		<message>
+			<location filename="../settings_dialog.cpp" line="331"/>
+			<source>vkValidationCheckBox</source>
+			<translation>Enable Vulkan Validation Layers:\nEnables a system that validates the state of the Vulkan renderer and logs information about its internal state.\nThis will reduce performance and likely change the behavior of emulation.</translation>
+		</message>
+		<message>
+			<location filename="../settings_dialog.cpp" line="333"/>
+			<source>vkSyncValidationCheckBox</source>
+			<translation>Enable Vulkan Synchronization Validation:\nEnables a system that validates the timing of Vulkan rendering tasks.\nThis will reduce performance and likely change the behavior of emulation.</translation>
+		</message>
+		<message>
+			<location filename="../settings_dialog.cpp" line="335"/>
+			<source>rdocCheckBox</source>
+			<translation>Enable RenderDoc Debugging:\nIf enabled, the emulator will provide compatibility with Renderdoc to allow capture and analysis of the currently rendered frame.</translation>
+		</message>
+	</context>
+	<context>
 		<name>GameListFrame</name>
 		<message>
 			<source>Icon</source>

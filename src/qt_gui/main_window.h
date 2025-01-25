@@ -5,6 +5,7 @@
 
 #include <QActionGroup>
 #include <QDragEnterEvent>
+#include <QStyleFactory>
 #include <QTranslator>
 
 #include "background_music_player.h"
@@ -22,6 +23,8 @@
 #include "main_window_themes.h"
 #include "main_window_ui.h"
 #include "pkg_viewer.h"
+
+extern std::string s_system_style_name;
 
 class GameListFrame;
 
