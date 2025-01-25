@@ -116,7 +116,6 @@ void MainWindow::CreateActions() {
     m_theme_act_group->addAction(ui->setThemeViolet);
     m_theme_act_group->addAction(ui->setThemeGruvbox);
     m_theme_act_group->addAction(ui->setThemeTokyoNight);
-    m_theme_act_group->addAction(ui->setThemeSystem);
 }
 
 void MainWindow::AddUiWidgets() {
@@ -587,39 +586,6 @@ void MainWindow::CreateConnects() {
             isIconBlack = false;
         }
     });
-    connect(ui->setThemeSystem, &QAction::triggered, &m_window_themes, [this]() {
-        m_window_themes.SetWindowTheme(Theme::System, ui->mw_searchbar);
-        Config::setMainWindowTheme(static_cast<int>(Theme::System));
-
-        bool isSystemDarkMode;
-#if defined(__linux__) || defined(__APPLE__)
-        const QPalette defaultPalette;
-        const auto text = defaultPalette.color(QPalette::WindowText);
-        const auto window = defaultPalette.color(QPalette::Window);
-        if (text.lightness() > window.lightness()) {
-            isSystemDarkMode = true;
-        } else {
-            isSystemDarkMode = false;
-        }
-#else
-        if(QGuiApplication::styleHints()->colorScheme() == Qt::ColorScheme::Dark) {
-            isSystemDarkMode = true;
-        } else {
-            isSystemDarkMode = false;
-        }
-#endif
-        if (isSystemDarkMode) {
-            if (isIconBlack) {
-                SetUiIcons(false);
-                isIconBlack = false;
-            }
-        } else {
-            if (!isIconBlack) {
-                SetUiIcons(true);
-                isIconBlack = true;
-            }
-        }
-    });
 }
 
 void MainWindow::StartGame() {
@@ -1000,32 +966,6 @@ void MainWindow::SetLastUsedTheme() {
         isIconBlack = false;
         SetUiIcons(false);
         break;
-    case Theme::System:
-        ui->setThemeSystem->setChecked(true);
-        bool isSystemDarkMode;
-#if defined(__linux__) || defined(__APPLE__)
-        const QPalette defaultPalette;
-        const auto text = defaultPalette.color(QPalette::WindowText);
-        const auto window = defaultPalette.color(QPalette::Window);
-        if (text.lightness() > window.lightness()) {
-            isSystemDarkMode = true;
-        } else {
-            isSystemDarkMode = false;
-        }
-#else
-        if (QGuiApplication::styleHints()->colorScheme() == Qt::ColorScheme::Dark) {
-            isSystemDarkMode = true;
-        } else {
-            isSystemDarkMode = false;
-        }
-#endif
-        if (isSystemDarkMode == true) {
-            isIconBlack = false;
-            SetUiIcons(false);
-        } else if (isSystemDarkMode == false) {
-            isIconBlack = true;
-        }
-        break;
     }
 }
 
@@ -1190,28 +1130,25 @@ bool MainWindow::eventFilter(QObject* obj, QEvent* event) {
         }
     }
     if (event->type() == QEvent::ApplicationPaletteChange) {
-        if (ui->setThemeSystem->isChecked()) {
-            bool isSystemDarkMode;
+        bool isSystemDarkMode;
 
 #if defined(__linux__) || defined(__APPLE__)
-            const QPalette defaultPalette;
-            const auto text = defaultPalette.color(QPalette::WindowText);
-            const auto window = defaultPalette.color(QPalette::Window);
-            isSystemDarkMode = (text.lightness() > window.lightness());
+        const QPalette defaultPalette;
+        const auto text = defaultPalette.color(QPalette::WindowText);
+        const auto window = defaultPalette.color(QPalette::Window);
+        isSystemDarkMode = (text.lightness() > window.lightness());
 #else
-            isSystemDarkMode =
-                (QGuiApplication::styleHints()->colorScheme() == Qt::ColorScheme::Dark);
+        isSystemDarkMode = (QGuiApplication::styleHints()->colorScheme() == Qt::ColorScheme::Dark);
 #endif
-            if (isSystemDarkMode) {
-                if (isIconBlack) {
-                    SetUiIcons(false);
-                    isIconBlack = false;
-                }
-            } else {
-                if (!isIconBlack) {
-                    SetUiIcons(true);
-                    isIconBlack = true;
-                }
+        if (isSystemDarkMode) {
+            if (isIconBlack) {
+                SetUiIcons(false);
+                isIconBlack = false;
+            }
+        } else {
+            if (!isIconBlack) {
+                SetUiIcons(true);
+                isIconBlack = true;
             }
         }
     }

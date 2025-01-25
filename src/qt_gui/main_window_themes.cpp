@@ -6,14 +6,6 @@
 void WindowThemes::SetWindowTheme(Theme theme, QLineEdit* mw_searchbar) {
     QPalette themePalette;
 
-    static QPalette s_system_palette;
-    static bool s_system_style_name_set;
-
-    if (!s_system_style_name_set) {
-        s_system_style_name_set = true;
-        s_system_palette = QApplication::palette();
-    }
-
     switch (theme) {
     case Theme::Dark:
         mw_searchbar->setStyleSheet(
@@ -172,15 +164,6 @@ void WindowThemes::SetWindowTheme(Theme theme, QLineEdit* mw_searchbar) {
         themePalette.setColor(QPalette::Highlight, QColor(79, 214, 190));
         themePalette.setColor(QPalette::HighlightedText, Qt::black);
         qApp->setPalette(themePalette);
-        break;
-    case Theme::System:
-        mw_searchbar->setStyleSheet("QLineEdit {"
-                                    "border: 1px solid;"
-                                    "border-radius: 4px; padding: 5px; }"
-                                    "QLineEdit:focus {"
-                                    "border: 1px solid; }");
-        qApp->setPalette(s_system_palette);
-        qApp->setStyleSheet(QString());
         break;
     }
 }
