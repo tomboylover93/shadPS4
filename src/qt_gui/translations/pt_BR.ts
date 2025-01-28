@@ -962,7 +962,7 @@
 		</message>
 		<message>
 			<source>crashDiagnosticsCheckBox</source>
-			<translation>Cria um arquivo .yaml com informações sobre o estado do Vulkan no momento da falha.\nÚtil para depurar erros de 'Device lost'. Se você tiver isso habilitado, você deve habilitar os Marcadores de Depuração de Host E Convidado.\nNão funciona em GPUs Intel.\nVocê precisa ter as Camadas de Validação Vulkan habilitadas e o SDK Vulkan para que isso funcione.</translation>
+			<translation>Cria um arquivo .yaml com informações sobre o estado do Vulkan no momento da falha.\nÚtil para depurar erros de 'Device lost'. Se você tiver isso habilitado, você deve habilitar os Marcadores de Depuração de Host e de Convidado.\nNão funciona em GPUs da Intel.\nVocê precisa ter as Camadas de Validação Vulkan habilitadas e o SDK do Vulkan para que isso funcione.</translation>
 		</message>
 		<message>
 			<source>copyGPUBuffersCheckBox</source>
