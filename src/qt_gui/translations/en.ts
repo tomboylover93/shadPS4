@@ -585,6 +585,10 @@
 			<translation>Logger</translation>
 		</message>
 		<message>
+			<source>Advanced</source>
+			<translation>Advanced</translation>
+		</message>
+		<message>
 			<source>Log Type</source>
 			<translation>Log Type</translation>
 		</message>
@@ -700,6 +704,27 @@
 			<source>Enable RenderDoc Debugging</source>
 			<translation>Enable RenderDoc Debugging</translation>
 		</message>
+		<message>
+			<source>Enable Crash Diagnostics</source>
+			<translation>Enable Crash Diagnostics</translation>
+		</message>
+		<message>
+			<source>Collect Shaders</source>
+			<translation>Collect Shaders</translation>
+		</message>
+		<message>
+			<source>Copy GPU Buffers</source>
+			<translation>Enable RenderDoc Debugging</translation>
+		</message>
+		<message>
+			<source>Host Debug Markers</source>
+			<translation>Host Debug Markers</translation>
+		</message>
+		<message>
+			<source>Guest Debug Markers</source>
+			<translation>Guest Debug Markers</translation>
+		</message>
+		
 		<message>
 			<source>Update</source>
 			<translation>Update</translation>

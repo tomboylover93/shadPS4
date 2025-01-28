@@ -585,6 +585,10 @@
 			<translation>日志</translation>
 		</message>
 		<message>
+			<source>Advanced</source>
+			<translation>Advanced</translation>
+		</message>
+		<message>
 			<source>Log Type</source>
 			<translation>日志类型</translation>
 		</message>
@@ -699,6 +703,26 @@
 		<message>
 			<source>Enable RenderDoc Debugging</source>
 			<translation>启用 RenderDoc 调试</translation>
+		</message>
+		<message>
+			<source>Enable Crash Diagnostics</source>
+			<translation>Enable Crash Diagnostics</translation>
+		</message>
+		<message>
+			<source>Collect Shaders</source>
+			<translation>Collect Shaders</translation>
+		</message>
+		<message>
+			<source>Copy GPU Buffers</source>
+			<translation>Enable RenderDoc Debugging</translation>
+		</message>
+		<message>
+			<source>Host Debug Markers</source>
+			<translation>Host Debug Markers</translation>
+		</message>
+		<message>
+			<source>Guest Debug Markers</source>
+			<translation>Guest Debug Markers</translation>
 		</message>
 		<message>
 			<source>Update</source>
@@ -927,6 +951,26 @@
 		<message>
 			<source>rdocCheckBox</source>
 			<translation>启用 RenderDoc 调试:\n启用后模拟器将提供与 Renderdoc 的兼容性，允许在渲染过程中捕获和分析当前渲染的帧。</translation>
+		</message>
+		<message>
+			<source>collectShaderCheckBox</source>
+			<translation>You need this enabled to edit shaders with the debug menu (Ctrl + F10).</translation>
+		</message>
+		<message>
+			<source>crashDiagnosticsCheckBox</source>
+			<translation>Creates a .yaml file with info about the Vulkan state at the time of crashing.\nUseful for debugging 'Device lost' errors. If you have this enabled, you should enable Host AND Guest Debug Markers.\nDoes not work on Intel GPUs.\nYou need Vulkan Validation Layers enabled and the Vulkan SDK for this to work.</translation>
+		</message>
+		<message>
+			<source>copyGPUBuffersCheckBox</source>
+			<translation>Gets around race conditions involving GPU submits.\nMay or may not help with PM4 type 0 crashes.</translation>
+		</message>
+		<message>
+			<source>hostMarkersCheckBox</source>
+			<translation>Inserts emulator-side information like markers for specific AMDGPU commands around Vulkan commands, as well as giving resources debug names.\nIf you have this enabled, you should enable Crash Diagnostics.\nUseful for programs like RenderDoc.</translation>
+		</message>
+		<message>
+			<source>guestMarkersCheckBox</source>
+			<translation>Inserts any debug markers the game itself has added to the command buffer.\nIf you have this enabled, you should enable Crash Diagnostics.\nUseful for programs like RenderDoc.</translation>
 		</message>
 		<message>
 			<source>saveDataBox</source>
