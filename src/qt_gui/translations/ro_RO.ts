@@ -745,6 +745,10 @@
 			<translation>Setări GUI</translation>
 		</message>
 		<message>
+			<source>Title Music</source>
+			<translation>Title Music</translation>
+		</message>
+		<message>
 			<source>Disable Trophy Pop-ups</source>
 			<translation>Disable Trophy Pop-ups</translation>
 		</message>

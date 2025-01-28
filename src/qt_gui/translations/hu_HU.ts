@@ -585,10 +585,6 @@
 			<translation>Naplózó</translation>
 		</message>
 		<message>
-			<source>Advanced</source>
-			<translation>Advanced</translation>
-		</message>
-		<message>
 			<source>Log Type</source>
 			<translation>Naplózási Típus</translation>
 		</message>
@@ -743,6 +739,10 @@
 		<message>
 			<source>GUI Settings</source>
 			<translation>GUI Beállítások</translation>
+		</message>
+		<message>
+			<source>Title Music</source>
+			<translation>Title Music</translation>
 		</message>
 		<message>
 			<source>Disable Trophy Pop-ups</source>

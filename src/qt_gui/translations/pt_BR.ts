@@ -585,10 +585,6 @@
 			<translation>Registro-Log</translation>
 		</message>
 		<message>
-			<source>Advanced</source>
-			<translation>Avançado</translation>
-		</message>
-		<message>
 			<source>Log Type</source>
 			<translation>Tipo de Registro</translation>
 		</message>
@@ -743,6 +739,10 @@
 		<message>
 			<source>GUI Settings</source>
 			<translation>Configurações da Interface</translation>
+		</message>
+		<message>
+			<source>Title Music</source>
+			<translation>Música no Menu</translation>
 		</message>
 		<message>
 			<source>Disable Trophy Pop-ups</source>
