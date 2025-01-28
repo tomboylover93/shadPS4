@@ -585,10 +585,6 @@
 			<translation>Logger</translation>
 		</message>
 		<message>
-			<source>Advanced</source>
-			<translation>Advanced</translation>
-		</message>
-		<message>
 			<source>Log Type</source>
 			<translation>Log Type</translation>
 		</message>
