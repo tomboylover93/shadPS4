@@ -1,6 +1,4 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<!-- SPDX-FileCopyrightText: Copyright 2024 shadPS4 Emulator Project
-     SPDX-License-Identifier: GPL-2.0-or-later -->
 <ui version="4.0">
  <class>SettingsDialog</class>
  <widget class="QDialog" name="SettingsDialog">
@@ -12,7 +10,7 @@
     <x>0</x>
     <y>0</y>
     <width>970</width>
-    <height>750</height>
+    <height>756</height>
    </rect>
   </property>
   <property name="sizePolicy">
@@ -59,7 +57,7 @@
       </size>
      </property>
      <property name="currentIndex">
-      <number>6</number>
+      <number>1</number>
      </property>
      <widget class="QScrollArea" name="generalTab">
       <property name="widgetResizable">
@@ -73,8 +71,8 @@
         <rect>
          <x>0</x>
          <y>0</y>
-         <width>718</width>
-         <height>332</height>
+         <width>900</width>
+         <height>480</height>
         </rect>
        </property>
        <layout class="QVBoxLayout" name="generalTabVLayout" stretch="0">
@@ -130,9 +128,6 @@
                <property name="bottomMargin">
                 <number>9</number>
                </property>
-               <property name="alignment">
-                  <set>Qt::AlignmentFlag::AlignLeading|Qt::AlignmentFlag::AlignLeft|Qt::AlignmentFlag::AlignTop</set>
-                 </property>
                <item>
                 <layout class="QVBoxLayout" name="emulatorverticalLayout">
                  <property name="spacing">
@@ -454,8 +449,8 @@
         <rect>
          <x>0</x>
          <y>0</y>
-         <width>646</width>
-         <height>395</height>
+         <width>900</width>
+         <height>480</height>
         </rect>
        </property>
        <layout class="QVBoxLayout" name="guiTabVLayout" stretch="0">
@@ -555,6 +550,29 @@
                  <property name="text">
                   <string>Show Game Size In List</string>
                  </property>
+                </widget>
+               </item>
+               <item>
+                <widget class="QGroupBox" name="widgetComboBox">
+                 <property name="title">
+                  <string>Widget Style</string>
+                 </property>
+                 <layout class="QVBoxLayout" name="verticalLayout_2">
+                  <item>
+                   <widget class="QComboBox" name="currentWidgetComboBox">
+                    <item>
+                     <property name="text">
+                      <string>Fusion</string>
+                     </property>
+                    </item>
+                    <item>
+                     <property name="text">
+                      <string>System</string>
+                     </property>
+                    </item>
+                   </widget>
+                  </item>
+                 </layout>
                 </widget>
                </item>
                <item>
@@ -789,13 +807,16 @@
            </layout>
           </item>
           <item>
-           <layout class="QVBoxLayout" name="CompatTabLayoutRight" stretch="0,0">
+           <layout class="QVBoxLayout" name="CompatTabLayoutRight" stretch="0,0,0">
             <property name="spacing">
              <number>6</number>
             </property>
             <property name="bottomMargin">
              <number>0</number>
             </property>
+            <item>
+             <widget class="QComboBox" name="comboBox"/>
+            </item>
             <item>
              <widget class="QGroupBox" name="CompatgroupBox">
               <property name="sizePolicy">
@@ -903,8 +924,8 @@
         <rect>
          <x>0</x>
          <y>0</y>
-         <width>545</width>
-         <height>141</height>
+         <width>900</width>
+         <height>480</height>
         </rect>
        </property>
        <layout class="QVBoxLayout" name="graphicsTabVLayout" stretch="0,0">
@@ -1198,8 +1219,8 @@
         <rect>
          <x>0</x>
          <y>0</y>
-         <width>234</width>
-         <height>292</height>
+         <width>900</width>
+         <height>480</height>
         </rect>
        </property>
        <layout class="QVBoxLayout" name="userTabVLayout" stretch="0,0,1">
@@ -1342,8 +1363,8 @@
         <rect>
          <x>0</x>
          <y>0</y>
-         <width>455</width>
-         <height>252</height>
+         <width>900</width>
+         <height>480</height>
         </rect>
        </property>
        <layout class="QVBoxLayout" name="inputTabVLayout" stretch="0,0">
@@ -1451,7 +1472,7 @@
                     </property>
                     <property name="minimumSize">
                      <size>
-                      <width>0</width>
+                      <width>98</width>
                       <height>0</height>
                      </size>
                     </property>
@@ -1626,8 +1647,8 @@
         <rect>
          <x>0</x>
          <y>0</y>
-         <width>216</width>
-         <height>254</height>
+         <width>900</width>
+         <height>480</height>
         </rect>
        </property>
        <layout class="QVBoxLayout" name="pathsTabLayout">
@@ -1716,8 +1737,8 @@
         <rect>
          <x>0</x>
          <y>0</y>
-         <width>946</width>
-         <height>536</height>
+         <width>900</width>
+         <height>480</height>
         </rect>
        </property>
        <layout class="QVBoxLayout" name="debugTabVLayout" stretch="0,0">

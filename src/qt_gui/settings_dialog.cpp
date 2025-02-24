@@ -22,6 +22,9 @@
 #include "background_music_player.h"
 #include "common/logging/backend.h"
 #include "common/logging/filter.h"
+#include "common/logging/formatter.h"
+#include "common/logging/log.h"
+#include "main_window.h"
 #include "settings_dialog.h"
 #include "ui_settings_dialog.h"
 QStringList languageNames = {"Arabic",
@@ -302,6 +305,9 @@ SettingsDialog::SettingsDialog(std::span<const QString> physical_devices,
         ui->updaterGroupBox->installEventFilter(this);
 #endif
         ui->GUIBackgroundImageGroupBox->installEventFilter(this);
+#if defined(__linux__) || defined(__APPLE__)
+        ui->widgetComboBox->installEventFilter(this);
+#endif
         ui->GUIMusicGroupBox->installEventFilter(this);
         ui->disableTrophycheckBox->installEventFilter(this);
         ui->enableCompatibilityCheckBox->installEventFilter(this);
@@ -404,6 +410,12 @@ void SettingsDialog::LoadValuesFromConfig() {
     ui->disableTrophycheckBox->setChecked(
         toml::find_or<bool>(data, "General", "isTrophyPopupDisabled", false));
     ui->BGMVolumeSlider->setValue(toml::find_or<int>(data, "General", "BGMvolume", 50));
+#if defined(__linux__) || defined(__APPLE__)
+    ui->currentWidgetComboBox->setCurrentText(
+        QString::fromStdString(toml::find_or<std::string>(data, "GUI", "widgetStyle", "fusion")));
+#endif
+    ui->disableTrophycheckBox->setChecked(
+        toml::find_or<bool>(data, "General", "isTrophyPopupDisabled", false));
     ui->discordRPCCheckbox->setChecked(
         toml::find_or<bool>(data, "General", "enableDiscordRPC", true));
     QString translatedText_FullscreenMode =
@@ -579,6 +591,10 @@ void SettingsDialog::updateNoteTextEdit(const QString& elementName) {
 #endif
     } else if (elementName == "GUIBackgroundImageGroupBox") {
         text = tr("Background Image:\\nControl the opacity of the game background image.");
+#if defined(__linux__) || defined(__APPLE__)
+    } else if (elementName == "widgetComboBox") {
+        text = tr("widgetComboBox");
+#endif
     } else if (elementName == "GUIMusicGroupBox") {
         text = tr("Play Title Music:\\nIf a game supports it, enable playing special music when selecting the game in the GUI.");
     } else if (elementName == "enableHDRCheckBox") {
@@ -692,6 +708,9 @@ void SettingsDialog::UpdateSettings() {
     Config::setCursorHideTimeout(ui->idleTimeoutSpinBox->value());
     Config::setGpuId(ui->graphicsAdapterBox->currentIndex() - 1);
     Config::setBGMvolume(ui->BGMVolumeSlider->value());
+#if defined(__linux__) || defined(__APPLE__)
+    Config::setWidgetStyle(ui->currentWidgetComboBox->currentText().toStdString());
+#endif
     Config::setLanguage(languageIndexes[ui->consoleLanguageComboBox->currentIndex()]);
     Config::setEnableDiscordRPC(ui->discordRPCCheckbox->isChecked());
     Config::setScreenWidth(ui->widthSpinBox->value());
@@ -734,6 +753,16 @@ void SettingsDialog::UpdateSettings() {
 #endif
 
     BackgroundMusicPlayer::getInstance().setVolume(ui->BGMVolumeSlider->value());
+
+    if (Config::getWidgetStyle() == "Fusion") {
+        qApp->setStyle(QStyleFactory::create("Fusion"));
+    } else if (Config::getWidgetStyle() == "System") {
+        qApp->setStyle(QString::fromStdString(s_system_style_name));
+    }
+
+    foreach (QWidget* widget, QApplication::topLevelWidgets()) {
+        widget->update();
+    }
 }
 
 void SettingsDialog::ResetInstallFolders() {

@@ -45,6 +45,7 @@ static std::string userName = "shadPS4";
 static std::string updateChannel;
 static std::string chooseHomeTab;
 static std::string backButtonBehavior = "left";
+static std::string widgetStyle = "Fusion";
 static bool useSpecialPad = false;
 static int specialPadClass = 1;
 static bool isMotionControlsEnabled = true;
@@ -214,6 +215,10 @@ std::string getLogFilter() {
 
 std::string getLogType() {
     return logType;
+}
+
+std::string getWidgetStyle() {
+    return widgetStyle;
 }
 
 std::string getUserName() {
@@ -454,6 +459,10 @@ void setLogFilter(const std::string& type) {
 
 void setSeparateLogFilesEnabled(bool enabled) {
     isSeparateLogFilesEnabled = enabled;
+}
+
+void setWidgetStyle(const std::string& type) {
+    widgetStyle = type;
 }
 
 void setUserName(const std::string& type) {
@@ -807,6 +816,7 @@ void load(const std::filesystem::path& path) {
         emulator_language = toml::find_or<std::string>(gui, "emulatorLanguage", "en_US");
         backgroundImageOpacity = toml::find_or<int>(gui, "backgroundImageOpacity", 50);
         showBackgroundImage = toml::find_or<bool>(gui, "showBackgroundImage", true);
+        widgetStyle = toml::find_or<std::string>(gui, "widgetStyle", "System");
     }
 
     if (data.contains("Settings")) {
@@ -915,6 +925,7 @@ void save(const std::filesystem::path& path) {
     data["GUI"]["emulatorLanguage"] = emulator_language;
     data["GUI"]["backgroundImageOpacity"] = backgroundImageOpacity;
     data["GUI"]["showBackgroundImage"] = showBackgroundImage;
+    data["GUI"]["widgetStyle"] = widgetStyle;
     data["Settings"]["consoleLanguage"] = m_language;
 
     std::ofstream file(path, std::ios::binary);
@@ -977,6 +988,7 @@ void setDefaultValues() {
     screenHeight = 720;
     logFilter = "";
     logType = "async";
+    widgetStyle = "Fusion";
     userName = "shadPS4";
     if (Common::isRelease) {
         updateChannel = "Release";

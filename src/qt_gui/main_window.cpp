@@ -5,6 +5,7 @@
 #include <QKeyEvent>
 #include <QPlainTextEdit>
 #include <QProgressDialog>
+#include <QStyleHints>
 
 #include "about_dialog.h"
 #include "cheats_patches.h"
@@ -30,6 +31,8 @@
 #ifdef ENABLE_DISCORD_RPC
 #include "common/discord_rpc_handler.h"
 #endif
+
+std::string s_system_style_name;
 
 MainWindow::MainWindow(QWidget* parent) : QMainWindow(parent), ui(new Ui::MainWindow) {
     ui->setupUi(this);
@@ -130,11 +133,21 @@ void MainWindow::CreateActions() {
     m_theme_act_group->addAction(ui->setThemeViolet);
     m_theme_act_group->addAction(ui->setThemeGruvbox);
     m_theme_act_group->addAction(ui->setThemeTokyoNight);
+    m_theme_act_group->addAction(ui->setThemeSystem);
 }
 
 void MainWindow::AddUiWidgets() {
     // add toolbar widgets
-    QApplication::setStyle("Fusion");
+    QString qsystem_style_name;
+    qsystem_style_name = QApplication::style()->objectName();
+    s_system_style_name = qsystem_style_name.toStdString();
+
+    std::string widget_style = Config::getWidgetStyle();
+    if (widget_style == "Fusion") {
+        qApp->setStyle(QStyleFactory::create("Fusion"));
+    } else if (widget_style == "System") {
+        qApp->setStyle(qsystem_style_name);
+    }
     ui->toolBar->setObjectName("mw_toolbar");
     ui->toolBar->addWidget(ui->playButton);
     ui->toolBar->addWidget(ui->pauseButton);
@@ -651,6 +664,39 @@ void MainWindow::CreateConnects() {
             isIconBlack = false;
         }
     });
+    connect(ui->setThemeSystem, &QAction::triggered, &m_window_themes, [this]() {
+        m_window_themes.SetWindowTheme(Theme::System, ui->mw_searchbar);
+        Config::setMainWindowTheme(static_cast<int>(Theme::System));
+
+        bool isSystemDarkMode;
+#if defined(__linux__) || defined(__APPLE__)
+        const QPalette defaultPalette;
+        const auto text = defaultPalette.color(QPalette::WindowText);
+        const auto window = defaultPalette.color(QPalette::Window);
+        if (text.lightness() > window.lightness()) {
+            isSystemDarkMode = true;
+        } else {
+            isSystemDarkMode = false;
+        }
+#else
+        if(QGuiApplication::styleHints()->colorScheme() == Qt::ColorScheme::Dark) {
+            isSystemDarkMode = true;
+        } else {
+            isSystemDarkMode = false;
+        }
+#endif
+        if (isSystemDarkMode) {
+            if (isIconBlack) {
+                SetUiIcons(false);
+                isIconBlack = false;
+            }
+        } else {
+            if (!isIconBlack) {
+                SetUiIcons(true);
+                isIconBlack = true;
+            }
+        }
+    });
 }
 
 void MainWindow::StartGame() {
@@ -1098,6 +1144,32 @@ void MainWindow::SetLastUsedTheme() {
         isIconBlack = false;
         SetUiIcons(false);
         break;
+    case Theme::System:
+        ui->setThemeSystem->setChecked(true);
+        bool isSystemDarkMode;
+#if defined(__linux__) || defined(__APPLE__)
+        const QPalette defaultPalette;
+        const auto text = defaultPalette.color(QPalette::WindowText);
+        const auto window = defaultPalette.color(QPalette::Window);
+        if (text.lightness() > window.lightness()) {
+            isSystemDarkMode = true;
+        } else {
+            isSystemDarkMode = false;
+        }
+#else
+        if (QGuiApplication::styleHints()->colorScheme() == Qt::ColorScheme::Dark) {
+            isSystemDarkMode = true;
+        } else {
+            isSystemDarkMode = false;
+        }
+#endif
+        if (isSystemDarkMode == true) {
+            isIconBlack = false;
+            SetUiIcons(false);
+        } else if (isSystemDarkMode == false) {
+            isIconBlack = true;
+        }
+        break;
     }
 }
 
@@ -1259,6 +1331,32 @@ bool MainWindow::eventFilter(QObject* obj, QEvent* event) {
             if (tblMode != 2 && (tblMode != 1 || m_game_grid_frame->IsValidCellSelected())) {
                 StartGame();
                 return true;
+            }
+        }
+    }
+    if (event->type() == QEvent::ApplicationPaletteChange) {
+        if (ui->setThemeSystem->isChecked()) {
+            bool isSystemDarkMode;
+
+#if defined(__linux__) || defined(__APPLE__)
+            const QPalette defaultPalette;
+            const auto text = defaultPalette.color(QPalette::WindowText);
+            const auto window = defaultPalette.color(QPalette::Window);
+            isSystemDarkMode = (text.lightness() > window.lightness());
+#else
+            isSystemDarkMode =
+                (QGuiApplication::styleHints()->colorScheme() == Qt::ColorScheme::Dark);
+#endif
+            if (isSystemDarkMode) {
+                if (isIconBlack) {
+                    SetUiIcons(false);
+                    isIconBlack = false;
+                }
+            } else {
+                if (!isIconBlack) {
+                    SetUiIcons(true);
+                    isIconBlack = true;
+                }
             }
         }
     }

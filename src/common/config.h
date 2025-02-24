@@ -35,6 +35,7 @@ bool getShowBackgroundImage();
 
 std::string getLogFilter();
 std::string getLogType();
+std::string getWidgetStyle();
 std::string getUserName();
 std::string getUpdateChannel();
 std::string getChooseHomeTab();
@@ -113,6 +114,8 @@ void setLogType(const std::string& type);
 void setLogFilter(const std::string& type);
 void setSeparateLogFilesEnabled(bool enabled);
 bool getSeparateLogFilesEnabled();
+void setWidgetStyle(const std::string& type);
+
 void setVkValidation(bool enable);
 void setVkSyncValidation(bool enable);
 void setRdocEnabled(bool enable);
