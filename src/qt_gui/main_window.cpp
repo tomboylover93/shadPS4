@@ -134,6 +134,7 @@ void MainWindow::CreateActions() {
     m_theme_act_group->addAction(ui->setThemeGruvbox);
     m_theme_act_group->addAction(ui->setThemeTokyoNight);
     m_theme_act_group->addAction(ui->setThemeSystem);
+    m_theme_act_group->addAction(ui->setThemeOled);
 }
 
 void MainWindow::AddUiWidgets() {
@@ -697,6 +698,14 @@ void MainWindow::CreateConnects() {
             }
         }
     });
+    connect(ui->setThemeOled, &QAction::triggered, &m_window_themes, [this]() {
+        m_window_themes.SetWindowTheme(Theme::Oled, ui->mw_searchbar);
+        Config::setMainWindowTheme(static_cast<int>(Theme::Oled));
+        if (isIconBlack) {
+            SetUiIcons(false);
+            isIconBlack = false;
+        }
+    });
 }
 
 void MainWindow::StartGame() {
@@ -1169,6 +1178,11 @@ void MainWindow::SetLastUsedTheme() {
         } else if (isSystemDarkMode == false) {
             isIconBlack = true;
         }
+        break;
+    case Theme::Oled:
+        ui->setThemeOled->setChecked(true);
+        isIconBlack = false;
+        SetUiIcons(false);
         break;
     }
 }

@@ -40,6 +40,7 @@ public:
     QAction* setThemeGruvbox;
     QAction* setThemeTokyoNight;
     QAction* setThemeSystem;
+    QAction* setThemeOled;
     QWidget* centralWidget;
     QLineEdit* mw_searchbar;
     QPushButton* playButton;
@@ -175,6 +176,9 @@ public:
         setThemeSystem = new QAction(MainWindow);
         setThemeSystem->setObjectName("setThemeSystem");
         setThemeSystem->setCheckable(true);
+        setThemeOled = new QAction(MainWindow);
+        setThemeOled->setObjectName("setThemeOled");
+        setThemeOled->setCheckable(true);
         centralWidget = new QWidget(MainWindow);
         centralWidget->setObjectName("centralWidget");
         sizePolicy.setHeightForWidth(centralWidget->sizePolicy().hasHeightForWidth());
@@ -308,6 +312,7 @@ public:
         menuThemes->addAction(setThemeGruvbox);
         menuThemes->addAction(setThemeTokyoNight);
         menuThemes->addAction(setThemeSystem);
+        menuThemes->addAction(setThemeOled);
         menuGame_List_Icons->addAction(setIconSizeTinyAct);
         menuGame_List_Icons->addAction(setIconSizeSmallAct);
         menuGame_List_Icons->addAction(setIconSizeMediumAct);
@@ -399,6 +404,7 @@ public:
         setThemeGruvbox->setText("Gruvbox");
         setThemeTokyoNight->setText("Tokyo Night");
         setThemeSystem->setText(QCoreApplication::translate("MainWindow", "System", nullptr));
+        setThemeOled->setText("OLED");
         toolBar->setWindowTitle(QCoreApplication::translate("MainWindow", "toolBar", nullptr));
     } // retranslateUi
 };
