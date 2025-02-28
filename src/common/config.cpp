@@ -54,6 +54,7 @@ static bool isShaderDebug = false;
 static bool isShowSplash = false;
 static bool isAutoUpdate = false;
 static bool isAlwaysShowChangelog = false;
+static bool isLeftSideTrophy = false;
 static bool isNullGpu = false;
 static bool shouldCopyGPUBuffers = false;
 static bool shouldDumpShaders = false;
@@ -70,6 +71,7 @@ static bool isFpsColor = true;
 static bool isSeparateLogFilesEnabled = false;
 static s16 cursorState = HideCursorState::Idle;
 static int cursorHideTimeout = 5; // 5 seconds (default)
+static double trophyNotificationDuration = 6.0;
 static bool useUnifiedInputConfig = true;
 static bool overrideControllerColor = false;
 static int controllerCustomColorRGB[3] = {0, 0, 255};
@@ -197,6 +199,10 @@ int getCursorHideTimeout() {
     return cursorHideTimeout;
 }
 
+double getTrophyNotificationDuration() {
+    return trophyNotificationDuration;
+}
+
 u32 getScreenWidth() {
     return screenWidth;
 }
@@ -267,6 +273,10 @@ bool autoUpdate() {
 
 bool alwaysShowChangelog() {
     return isAlwaysShowChangelog;
+}
+
+bool leftSideTrophy() {
+    return isLeftSideTrophy;
 }
 
 bool nullGpu() {
@@ -376,6 +386,9 @@ void setAutoUpdate(bool enable) {
 void setAlwaysShowChangelog(bool enable) {
     isAlwaysShowChangelog = enable;
 }
+void setLeftSideTrophy(bool enable) {
+    isLeftSideTrophy = enable;
+}
 
 void setNullGpu(bool enable) {
     isNullGpu = enable;
@@ -439,6 +452,9 @@ void setCursorState(s16 newCursorState) {
 
 void setCursorHideTimeout(int newcursorHideTimeout) {
     cursorHideTimeout = newcursorHideTimeout;
+}
+void setTrophyNotificationDuration(double newTrophyNotificationDuration) {
+    trophyNotificationDuration = newTrophyNotificationDuration;
 }
 
 void setLanguage(u32 language) {
@@ -715,6 +731,8 @@ void load(const std::filesystem::path& path) {
         isNeo = toml::find_or<bool>(general, "isPS4Pro", false);
         playBGM = toml::find_or<bool>(general, "playBGM", false);
         isTrophyPopupDisabled = toml::find_or<bool>(general, "isTrophyPopupDisabled", false);
+        trophyNotificationDuration =
+            toml::find_or<double>(general, "trophyNotificationDuration", 5.0);
         BGMvolume = toml::find_or<int>(general, "BGMvolume", 50);
         enableDiscordRPC = toml::find_or<bool>(general, "enableDiscordRPC", true);
         logFilter = toml::find_or<std::string>(general, "logFilter", "");
@@ -728,6 +746,7 @@ void load(const std::filesystem::path& path) {
         isShowSplash = toml::find_or<bool>(general, "showSplash", true);
         isAutoUpdate = toml::find_or<bool>(general, "autoUpdate", false);
         isAlwaysShowChangelog = toml::find_or<bool>(general, "alwaysShowChangelog", false);
+        isLeftSideTrophy = toml::find_or<bool>(general, "leftSideTrophy", false);
         separateupdatefolder = toml::find_or<bool>(general, "separateUpdateEnabled", false);
         compatibilityData = toml::find_or<bool>(general, "compatibilityEnabled", false);
         checkCompatibilityOnStartup =
@@ -867,6 +886,7 @@ void save(const std::filesystem::path& path) {
 
     data["General"]["isPS4Pro"] = isNeo;
     data["General"]["isTrophyPopupDisabled"] = isTrophyPopupDisabled;
+    data["General"]["trophyNotificationDuration"] = trophyNotificationDuration;
     data["General"]["playBGM"] = playBGM;
     data["General"]["BGMvolume"] = BGMvolume;
     data["General"]["enableDiscordRPC"] = enableDiscordRPC;
@@ -878,6 +898,7 @@ void save(const std::filesystem::path& path) {
     data["General"]["showSplash"] = isShowSplash;
     data["General"]["autoUpdate"] = isAutoUpdate;
     data["General"]["alwaysShowChangelog"] = isAlwaysShowChangelog;
+    data["General"]["leftSideTrophy"] = isLeftSideTrophy;
     data["General"]["separateUpdateEnabled"] = separateupdatefolder;
     data["General"]["compatibilityEnabled"] = compatibilityData;
     data["General"]["checkCompatibilityOnStartup"] = checkCompatibilityOnStartup;
@@ -1000,6 +1021,7 @@ void setDefaultValues() {
     chooseHomeTab = "General";
     cursorState = HideCursorState::Idle;
     cursorHideTimeout = 5;
+    trophyNotificationDuration = 6.0;
     backButtonBehavior = "left";
     useSpecialPad = false;
     specialPadClass = 1;
@@ -1008,6 +1030,7 @@ void setDefaultValues() {
     isShowSplash = false;
     isAutoUpdate = false;
     isAlwaysShowChangelog = false;
+    isLeftSideTrophy = false;
     isNullGpu = false;
     shouldDumpShaders = false;
     vblankDivider = 1;
